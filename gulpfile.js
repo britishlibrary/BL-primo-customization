@@ -12,6 +12,12 @@ const autoprefixer = require('gulp-autoprefixer')
 const browsersync = require('browser-sync').create()
 const clean = require('gulp-clean')
 const sourcemaps = require('gulp-sourcemaps')
+const imagemin = require('gulp-imagemin')
+const zip = require('gulp-zip')
+const handlebars = require('gulp-compile-handlebars')
+const hb = require('handlebars')
+
+const ZIP_FILENAME = process.env.ZIP_FILENAME || 'default_name'
 
 const paths = {
     scripts: {
@@ -25,6 +31,10 @@ const paths = {
     images: {
         src: './src/img/*',
         dest: './assets/img/'
+    },
+    templates: {
+        src: './src/templates/*.hbs',
+        dest: './'
     }
 }
 
@@ -66,18 +76,33 @@ function css() {
 
 function img() {
     return src(paths.images.src)
-        // Imagemin (gulp-imagemin) goes here
-        // Handle gif size using gifsicle
-        // Handle jpeg size using mozjpeg
-        // Handle png size using optipng
-        // Handle svg size using svgo
+        .pipe(imagemin([
+            imagemin.gifsicle({interlaced: true}),
+            imagemin.mozjpeg({quality: 75, progressive: true}),
+            imagemin.optipng({optimizationLevel: 5}),
+            imagemin.svgo({
+                plugins: [
+                    {removeViewBox: true},
+                    {cleanupIDs: false}
+                ]
+            })
+        ]))
         .pipe(dest(paths.images.dest))
+        .pipe(browsersync.stream())
+}
+
+function templates() {   
+    return src(paths.templates.src)
+    .pipe(handlebars())
+    .pipe(dest(paths.templates.dest))
+    .pipe(browsersync.stream())
 }
 
 function watchFiles() {
     watch('./src/js/*', js)
     watch('./src/scss/*', css)
     watch('./src/img/*', img)
+    watch('./src/templates/*', templates)
 }
 
 function clear() {
@@ -89,14 +114,21 @@ function clear() {
 
 function browserSync() {
     browsersync.init({
-        server: {
-            'baseDir': './',
-            'index': 'primo.html'
-        },
+        proxy: process.env.PROXY_URL,
+        serveStatic: ['./assets'],
         open: true,
         port: 3000
     })
 }
 
+function createZip() {
+    return src([
+        './assets/**/*',
+        './primo.html',
+    ]) 
+    .pipe(zip(`${ZIP_FILENAME}.zip`))
+    .pipe(dest('./'));
+}
+
 exports.watch = parallel(watchFiles, browserSync)
-exports.default = series(clear, parallel(js, css, img))
+exports.default = series(clear, parallel(js, css, img, templates), createZip);
