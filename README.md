@@ -13,8 +13,13 @@ A small project that allows you to run a local development environment for primo
 # Build system Todos:
 
 -   Add html processing
--   Add proxy to primo NLE using browser-sync
+-   Inject styles
+-   Inject JS
+-   Rewrite style from provided zip into scss
+-   Rewrite JS from provided zip
+-   Ensure zip output matches provided zip 
 
+-   Add proxy to external website using browser-sync - DONE 
 -   Zip in production - DONE
 -   Add img processing - DONE
 -   Add image optimisation - DONE
