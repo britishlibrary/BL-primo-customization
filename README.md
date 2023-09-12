@@ -1,43 +1,29 @@
-<!-- @format -->
-
 ## BL Primo Customisation
 
 A small project that allows you to run a local development environment for primo frontend customisation
 
 `npm install`
 
-`npm run start` - this is the development build, this will run browsersync and proxy the Primo instance for styling
+`npm run start` - this is the development build, this will run webpack dev server with script injection into proxy for the Primo instance - this is specific for styling and JS
 
-`npm run build` - this is the production build, this will output the custom styling for Primo as a ZIP
+`npm run static` - this gets us the HTML output with styling and JS
 
-# Build system Todos:
+`npm run build` - this is the production build, this will output the custom styling/js/html for Primo as a ZIP
 
--   Add html processing
--   Inject styles
--   Inject JS
--   Rewrite style from provided zip into scss
--   Rewrite JS from provided zip
--   Ensure zip output matches provided zip 
-
--   Add proxy to external website using browser-sync - DONE 
--   Zip in production - DONE
--   Add img processing - DONE
--   Add image optimisation - DONE
--   Minify in production - DONE
--   Add JS processing - DONE
--   Add local development server - DONE
--   Add production/development environmental split - DONE
--   Split watch requirements - DONE
--   Add sourcemaps - DONE
--   Add auto prefixing - DONE
--   Add css concat - DONE
--   Add error logging - DONE
-
-# Primo customisation work
-
-1. Rewrite provided css into sass
-    - Ensure output pathing is the same
-2. Ensure zip output matches requirements
+# Next steps:
+1. Speak to Jamie and get a copy of the live code
+    a. As part of this tell them not to make any code changes for around 1 week to facilitate us doing the work
+2. Fork the primo customisation build into another repo 
+    a. We want a vanilla build we can open source for others to use
+    b. We want our specific use case build for production primo customisation which is not open sourced 
+3. Convert the CSS to SCSS
+4. Make the JS Modular
+5. Ensure HTML output
+6. Fork the static header/footer projects and make the Primo specific changes
+7. Publish header/footer primo forks to NPM
+8. Import header/footer primo package into this project
+9. Ensure output Zip matches provided Zip
+10. CELEBRATE!
 
 # Futher todos
 
